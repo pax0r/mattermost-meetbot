@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+
+  meetbot:
+    build: .
+    image: pax0r/mattermost-meetbot:latest
+    restart: always
+    ports:
+      - "8000:80"
+    env_file:
+      - .env
+    volumes:
+      - ./credentials.json:/credentials.json
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis:/data
+
+volumes:
+  redis:
+    driver: local
